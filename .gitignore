@@ -1,5 +1,9 @@
 # ignore the data downloaded
 monsters/
+enemies/
+
+# Ignore ruff linter
+.ruff_cache/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

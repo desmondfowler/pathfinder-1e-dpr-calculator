@@ -1,6 +1,6 @@
 # Pathfinder 1e DPR Calculator
 
-This project is intended for users to calculate their DPR (damager per round) for the Pathfinder first edition (1e) Roleplaying Game. This may help them in planning out better optimized characters, or, if you're like me, it may just be fun to play around with the data. It involves a Python script that scrapes data on monsters from the Archives of Nethys website (aonprd.com) and aggregates that data based on the monsters' CR (challenge rating). It then uses that aggregated data to inform a DPR calculator app, where the user inputs their character stats and receives detailed output on their expected DPR.
+This project is intended for users to calculate their DPR (damager per round) for the Pathfinder first edition (1e) Roleplaying Game. This may help them in planning out better optimized characters, or, if you're like me, it may just be fun to play around with the data. It involves a Python script that scrapes data on in-game enemies (monsters, NPCs, excluding mythic monsters) from the Archives of Nethys website (aonprd.com) and aggregates that data based on the monsters' CR (challenge rating). It then uses that aggregated data to inform a DPR calculator app, where the user inputs their character stats and receives detailed output on their expected DPR.
 
 Many people have created tools like this in the past, but they all seemed to be missing something in my mind. I couldn't quite put my finger on it, so I decided to try and make my own. First, a little background information.
 
