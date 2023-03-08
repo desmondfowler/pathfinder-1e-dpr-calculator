@@ -1,6 +1,7 @@
 import os
 import requests
 from bs4 import BeautifulSoup
+from urllib.parse import quote
 
 USE_MYTHIC_MONSTERS = True
 
@@ -20,32 +21,37 @@ else :
 if not os.path.exists("enemies"):
     os.makedirs("enemies")
 
-# Output file
-outfile = "enemies/enemy_pages.txt"
-
 # Enemies list
 allEnemies = []
 
 # Download each page's HTML
 for url in prdUrls:
     try:
-        enemies = []
         content = requests.get(url).text
         soup = BeautifulSoup(content, 'html.parser')
         tableElements = soup.select("#main table tr td:first-child a")
+        
         for element in tableElements:
+            
             href = element.get("href")
-            if href.startswith("https://aonprd.com/"):
+            encoded = quote(href, safe='=?/()')
+            if encoded.startswith("https://aonprd.com/"):
                 input("found one")
-                enemy = "" + href
+                enemy = "" + encoded
             else :
-                enemy = "https://aonprd.com/" + href
-            with open(outfile, "w") as f:
-                f.write(enemy + '\n')
+                enemy = "https://aonprd.com/" + encoded
+            
+            allEnemies.append(enemy)
+
             
     except requests.exceptions.RequestException as e:
         print(url)
         print(type(e).__name__ + ": " + str(e))
-    
-# Now, to encode the URLs and allow them to be actually loaded
 
+# Sort and remove duplicates
+allEnemies = list(set(allEnemies))
+allEnemies = sorted(allEnemies)
+
+# Write to output file
+with open("enemies/enemy_pages.txt", "w") as f:
+    f.write("\n".join(allEnemies))
