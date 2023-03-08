@@ -30,7 +30,7 @@ This script requires the following dependencies:
 You can install these dependencies using pip, like so:
 
 ```bash
-pip install (fill this out with dependencies)
+pip install -r requirements.txt
 ```
 
 ### Data Scraping
