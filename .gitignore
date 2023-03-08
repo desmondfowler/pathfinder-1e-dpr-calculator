@@ -2,6 +2,9 @@
 monsters/
 enemies/
 
+# Ignore the node modules
+node_modules/
+
 # Ignore ruff linter
 .ruff_cache/
 
