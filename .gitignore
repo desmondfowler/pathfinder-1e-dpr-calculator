@@ -1,3 +1,6 @@
+# ignore the data downloaded
+monsters/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
