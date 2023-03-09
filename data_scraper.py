@@ -85,11 +85,8 @@ for i, url in enumerate(tqdm(enemyURLs)):
         time.sleep(1 / MAX_REQUESTS - tSpent)
     
     # Clean up HTML
-    regex = r'(?:\r\n|\r|\xad|' + chr(10) + ')+'
-    html = re.sub(r'(\s+)' + regex + r'|' + regex + r'(?=\s+)', r'\1', html) 
-    html = re.sub(regex, r' ', html) 
-    html = re.sub(r'(<br/?)\s*/?>', r'\1>', html) # Fix broken <br> tags
-    html = re.sub(r'[−—–‐‑‒―]|&ndash;|&mdash;', "-", html) 
+    html = re.sub(r'\s+', ' ', html.replace('\xad', '').replace('&ndash;', '-').replace('&mdash;', '-'))
+    html = re.sub(r'<br/?\s*/?>', '<br/>', html)
 
     #Parse the html using soup
     soup = BeautifulSoup(html, 'html.parser')
