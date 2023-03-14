@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "rimraf enemies, .ruff_cache"
+    "clean": "rimraf enemies/ .ruff_cache scrape.log"
   },
   "repository": {
     "type": "git",
