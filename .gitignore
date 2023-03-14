@@ -1,6 +1,6 @@
 # ignore the data downloaded
-enemies/
-dev/
+data/
+
 # Ignore the node modules
 node_modules/
 

@@ -14,3 +14,5 @@ ENEMY_INFO_FILE = "enemies/enemy_info.json"
 
 with open(ENEMY_INFO_FILE, "r") as f:
     enemyDict = json.load(f)
+
+print(enemyDict)

@@ -1,8 +1,9 @@
-# This script scrapes monster data from the Pathfinder Roleplaying Game website
-# (aonprd.com). It uses the BeautifulSoup and requests libraries to parse HTML
-# and make HTTP requests, and the tqdm library to display a progress bar.
-# Assumptions: the website structure and content will not change, and the
-# script will be run on a machine with internet access and Python 3.x installed.
+# This script scrapes monster data from the Pathfinder Roleplaying Game
+# website (aonprd.com). It uses the BeautifulSoup and requests libraries
+# to parse HTML and make HTTP requests, and the tqdm library to display
+# a progress bar. Assumptions: the website structure and content will
+# not change, and the script will be run on a machine with internet
+# access and Python 3.x installed.
 
 import json
 import logging
@@ -23,8 +24,9 @@ NUM_MONSTERS_TO_SCRAPE = 5
 # Change the below flag to True if you want to consider mythic monsters.
 # By default, it is False, since mythic monsters tend to be outliers
 USE_MYTHIC_MONSTERS = True
-ENEMY_PAGES_FILE = "enemies/enemy_pages.json"
-ENEMY_INFO_FILE = "enemies/enemy_info.json"
+DATA_PATH = "data"
+ENEMY_PAGES_FILE = "data/enemy_pages.json"
+ENEMY_INFO_FILE = "data/enemy_info.json"
 
 logging.basicConfig(filename='scrape.log', level=logging.DEBUG)
 # AoN urls for all monsters, npcs
@@ -54,11 +56,13 @@ def writeToJson(filename: str, data: dict) -> None:
 
 def addMythicUrls(urls: list[str], includeMythic: bool):
     """
-    Adds the URL for mythic monsters to the list of URLs if 'include_mythic' is True.
+    Adds the URL for mythic monsters to the list of URLs if 'include_mythic'
+    is True.
 
     Args:
         urls (list[str]): A list of URLs.
-        include_mythic (bool): A flag indicating whether mythic monsters should be included.
+        include_mythic (bool): A flag indicating whether mythic monsters
+        should be included.
 
     Returns:
         list[str]: The updated list of URLs.
@@ -70,24 +74,25 @@ def addMythicUrls(urls: list[str], includeMythic: bool):
 
 def createDirectories():
     """
-    Creates the 'enemies' directory if it doesn't exist, and exits the program with 
-    an error message if it can't be created or if it exists but is not a directory.
+    Creates the 'data' directory if it doesn't exist, and exits the
+    program with an error message if it can't be created or if it
+    exists but is not a directory.
     """
     try:
-        if not os.path.exists("enemies"):
-            os.makedirs("enemies")
+        if not os.path.exists(DATA_PATH):
+            os.makedirs(DATA_PATH)
     except OSError as e:
-        logging.error(f"Failed to create directory 'enemies'\nError: {str(e)}")
+        logging.error(f"Failed to create directory 'data'\nError: {str(e)}")
         sys.exit(1)
 
-    if not os.path.isdir("enemies"):
-        logging.error("Error: 'enemies' is not a directory")
+    if not os.path.isdir(DATA_PATH):
+        logging.error("Error: 'data' is not a directory")
         sys.exit(1)
 
 
 def createEnemyURLs(urlList: list):
     """
-    Creates a list of URLs for enemy pages to scrape by parsing the main 
+    Creates a list of URLs for enemy pages to scrape by parsing the main
     pages of the PRD website.
 
     :param urlList: a list of URLs for the main pages of the PRD website
@@ -97,18 +102,21 @@ def createEnemyURLs(urlList: list):
 
     if os.path.isfile(ENEMY_PAGES_FILE):
         print("Are you sure you want to scrape again?")
-        print("This will take time and is not required if you already have the data.")
+        print("This will take time.")
+        print("It is not required if you already have the data.\n")
         confirmation = input("y/n")
 
         if confirmation.strip() != "y":
             sys.exit(1)
         logging.info(
-            "URL List found, skipping creation of URL list (enemy_pages.json).")
-        with open(ENEMY_PAGES_FILE, "r") as f:
+            "URL List found, skipping creation of URL list.")
+        with open(os.path.abspath(ENEMY_PAGES_FILE), "r") as f:
+            print(f"Contents of file: {f.read()}")
+            f.seek(0)  # Reset file pointer to beginning of file
             enemyURLs = json.load(f)
     else:
         logging.info(
-            "No URL list found, proceeding to create URL list (enemy_pages.json).")
+            "No URL list found, proceeding to create URL list.")
         for url in urlList:
             try:
                 content = requests.get(url).text
@@ -130,8 +138,8 @@ def createEnemyURLs(urlList: list):
 
 def cleanUpHTML(htmlText: str):
     # Clean up HTML
-    htmlText = re.sub(r'\s+', ' ', htmlText.replace('\xad', '').replace('&ndash;', '-').
-                      replace('&mdash;', '-'))
+    htmlText = re.sub(r'\s+', ' ', htmlText.replace('\xad', '').
+                      replace('&ndash;', '-').replace('&mdash;', '-'))
     htmlText = re.sub(r'<br/?\s*/?>', '<br/>', htmlText)
     htmlText = re.sub(r'<(/)?b>', '', htmlText)
     return htmlText
@@ -177,7 +185,7 @@ def getMonsterAttributes(soup: BeautifulSoup, attributeDict: dict, name: str):
 
 def monsterDataScraper(urlList: list, amount: int = None):
     """
-    Scrapes data for each enemy page in `urlList`, extracting the 
+    Scrapes data for each enemy page in `urlList`, extracting the
     monster's name, CR, and attributes (AC, Touch, Flat-footed, and HP).
 
     :param urlList: a list of URLs for enemy pages to scrape
@@ -199,7 +207,7 @@ def monsterDataScraper(urlList: list, amount: int = None):
                         "HP": 0}
         currentTime = time.time()
         try:
-            html = requests.get(url).text
+            htmlText = requests.get(url).text
         except requests.exceptions.RequestException as e:
             logging.error(f"Failed to scrape URL: {url}\nError: {str(e)}")
             next
@@ -207,9 +215,9 @@ def monsterDataScraper(urlList: list, amount: int = None):
         if timeSpent < 1 / MAX_REQUEST_RATE:
             time.sleep(1 / MAX_REQUEST_RATE - timeSpent)
 
-        html = cleanUpHTML(html)
+        htmlText = cleanUpHTML(htmlText)
         # Parse the html using soup
-        soup = BeautifulSoup(html, 'html.parser')
+        soup = BeautifulSoup(htmlText, 'html.parser')
         # Find the monster's title tag which houses the name and CR value
         monsterTitleTag = soup.find('h2', {'class': 'title'})
         # Extract the text
@@ -253,10 +261,10 @@ def monsterDataScraper(urlList: list, amount: int = None):
         writeToJson(ENEMY_INFO_FILE, enemiesByCR)
     return enemiesByCR
 
+
 if __name__ == "__main__":
     PRD_URLS = addMythicUrls(PRD_URLS, USE_MYTHIC_MONSTERS)
     createDirectories()
     enemyURLs = createEnemyURLs(PRD_URLS)
     enemiesByCR = monsterDataScraper(enemyURLs, NUM_MONSTERS_TO_SCRAPE)
     logging.info(f"Done scraping {str(NUM_MONSTERS_TO_SCRAPE)} monsters.")
-
