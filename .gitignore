@@ -1,8 +1,9 @@
 # ignore the data downloaded
 data/
 
-# Ignore the node modules
+# Ignore the js stuff
 node_modules/
+tsconfig.json
 
 # Ignore ruff linter
 .ruff_cache/
