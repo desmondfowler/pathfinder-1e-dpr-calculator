@@ -111,8 +111,6 @@ def createEnemyURLs(urlList: list):
         logging.info(
             "URL List found, skipping creation of URL list.")
         with open(os.path.abspath(ENEMY_PAGES_FILE), "r") as f:
-            print(f"Contents of file: {f.read()}")
-            f.seek(0)  # Reset file pointer to beginning of file
             enemyURLs = json.load(f)
     else:
         logging.info(
