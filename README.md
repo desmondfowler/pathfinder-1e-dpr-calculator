@@ -61,7 +61,7 @@ After all the data has been aggregated into the respective JSON files, you can s
 
 ## Contributing
 
-If you would like to contribute to this project, please fork the repository and submit a pull request with your changes. We welcome contributions of all kinds, including bug fixes, new features, and documentation improvements.
+We welcome contributions of all kinds, including bug fixes, new features, and documentation improvements.
 
 ## License
 
