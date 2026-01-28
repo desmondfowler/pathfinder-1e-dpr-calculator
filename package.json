@@ -1,11 +1,12 @@
 {
   "name": "pathfinder-1e-dpr-calculator",
   "version": "1.0.0",
-  "description": "This project is intended for users to calculate their DPR (damager per round) for the Pathfinder first edition (1e) Roleplaying Game. This may help them in planning out better optimized characters, or, if you're like me, it may just be fun to play around with the data. It involves a Python script that scrapes data on in-game enemies (monsters, NPCs, excluding mythic monsters) from the Archives of Nethys website (aonprd.com) and aggregates that data based on the monsters' CR (challenge rating). It then uses that aggregated data to inform a DPR calculator app, where the user inputs their character stats and receives detailed output on their expected DPR.",
-  "main": "index.js",
+  "description": "This project is intended for users to calculate their DPR (damage per round) for the Pathfinder first edition (1e) Roleplaying Game. This may help them in planning out better optimized characters, or, if you're like me, it may just be fun to play around with the data. It involves a Python script that scrapes data on in-game enemies (monsters, NPCs, excluding mythic monsters) from the Archives of Nethys website (aonprd.com) and aggregates that data based on the monsters' CR (challenge rating). It then uses that aggregated data to inform a DPR calculator app, where the user inputs their character stats and receives detailed output on their expected DPR.",
+  "main": "src/web/server.ts",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node ./src/index.ts"
+    "start": "ts-node ./src/web/server.ts"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,7 @@
   },
   "homepage": "https://github.com/desmondfowler/pathfinder-1e-dpr-calculator#readme",
   "devDependencies": {
-    "@types/node": "^18.15.3",
-    "ts-node": "^10.9.1"
+    "@types/node": "^25.0.10",
+    "ts-node": "^10.9.2"
   }
 }
